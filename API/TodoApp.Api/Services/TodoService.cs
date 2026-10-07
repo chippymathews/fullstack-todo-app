@@ -8,12 +8,12 @@ namespace TodoApp.Api.Services
         private readonly ConcurrentDictionary<int, TodoItem> _items = new();
         private int _lastId;
 
-        public List<TodoItem> GetAll()
+        public List<TodoItem> GetTodoList()
         {
             return _items.Values.OrderBy(item => item.Id).ToList();
         }
 
-        public TodoItem Create(CreateTodoRequest request)
+        public TodoItem CreateTodo(CreateTodoRequest request)
         {
             var newItem = new TodoItem
             {
@@ -25,7 +25,7 @@ namespace TodoApp.Api.Services
             return newItem;
         }
 
-        public bool Delete(int id)
+        public bool DeleteTodo(int id)
         {
             return _items.TryRemove(id, out _);
         }

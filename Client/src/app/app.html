@@ -1,0 +1,65 @@
+<main class="page">
+  <h1>My Todo List</h1>
+
+  <section aria-labelledby="tasks-heading">
+    <div class="section-heading">
+      <h2 id="tasks-heading">Tasks</h2>
+
+      <div class="heading-status">
+        <span>{{ todos.length }} {{ todos.length === 1 ? 'task' : 'tasks' }}</span>
+
+        @if (successMessage) {
+          <span role="status">{{ successMessage }}</span>
+        }
+      </div>
+    </div>
+
+    <form class="add-form" (ngSubmit)="addTodo()">
+      <label class="visually-hidden" for="new-task">New task</label>
+      <input
+        id="new-task"
+        name="newTodo"
+        [(ngModel)]="newTodo"
+        maxlength="200"
+        placeholder="Add a task"
+        required
+      />
+      <button type="submit">Add</button>
+    </form>
+
+    @if (errorMessage) {
+      <p class="error-message" role="alert">{{ errorMessage }}</p>
+    }
+
+    @if (isLoading) {
+      <p role="status">Loading tasks...</p>
+    } @else if (todos.length > 0) {
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th scope="col">Task</th>
+            <th scope="col" class="actions-heading">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (todo of todos; track todo.id) {
+            <tr>
+              <td class="task-name">{{ todo.itemName }}</td>
+              <td class="task-action">
+                <button
+                  type="button"
+                  [attr.aria-label]="'Delete ' + todo.itemName"
+                  (click)="deleteTodo(todo)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <p>No tasks yet.</p>
+    }
+  </section>
+</main>

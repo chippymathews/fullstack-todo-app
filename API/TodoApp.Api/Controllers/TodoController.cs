@@ -22,18 +22,18 @@ namespace TodoApp.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<TodoItem>> GetAll()
         {
-            return Ok(_todoService.GetAll());
+            return Ok(_todoService.GetTodoList());
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(TodoItem), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<TodoItem> Create([FromBody] CreateTodoRequest request)
         {
-            var item = _todoService.Create(request);
+            var item = _todoService.CreateTodo(request);
             _logger.LogInformation("Created todo {TodoId}", item.Id);
 
-            return Created($"/api/todos/{item.Id}", item);
+            return StatusCode(StatusCodes.Status201Created, item);
         }
 
         [HttpDelete("{id:int}")]
@@ -41,7 +41,7 @@ namespace TodoApp.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(int id)
         {
-            if (! _todoService.Delete(id))
+            if (! _todoService.DeleteTodo(id))
             {
                 return NotFound();
             }
